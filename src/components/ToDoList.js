@@ -20,14 +20,22 @@ function ToDoList() {
                     } 
                 }
             case "ADD":
-                return {
+                if(state.tareaInput === "") {
+                    return {...state,
+                        msgError: "No podes agregar una tarea vacía"
+                    }
+                } else {
+                    return {
                     ...state,
                     lista: [...state.lista, {
                         texto: state.tareaInput,
                         id: uuidv4()
                     }],
-                    tareaInput: ""
+                    tareaInput: "",
+                    msgError: "",
             }
+                }
+                
             case "DELETE":
                 return {
                     ...state,
@@ -58,6 +66,7 @@ function ToDoList() {
     const initialState = {
         lista: [],
         tareaInput: "",
+        msgError: "",
         modoEdicion: false,
         tareaAEditar: null,
     }
@@ -82,7 +91,7 @@ function ToDoList() {
     }
 
     const editToDo = (item) => {
-        dispatch({type: "EDIT",payload: item})
+        dispatch({type: "EDIT", payload: item})
         console.log(estado)
     }
 
@@ -92,18 +101,19 @@ function ToDoList() {
         <ListTitle>Agregá una tarea</ListTitle>
         <ListForm onSubmit={addToDo}>
             <InputForm onChange={onInputChange} value={estado.modoEdicion ? estado.tareaAEditar.texto : estado.tareaInput}/>
-            <Button type="submit">{estado.modoEdicion ? "Editar" : "Agregar"}</Button>
+            {estado.msgError && <p>{estado.msgError}</p>}
+            <Button type="submit">{estado.modoEdicion ? "Guardar" : "Agregar"}</Button>
         </ListForm>
         <ItemContainer>
         {estado.lista.length > 0 &&
         estado.lista.map((item) => {
-          return <Items key={item.id}>
-           <p>{item.texto}</p>
-           <BtnContainer>
-           <ItemBtn onClick={() => deleteToDo(item.id)}><RiDeleteBin5Line fontSize={"1.3rem"} /></ItemBtn>
-           <ItemBtn onClick={() => editToDo(item)} bgcolor><RiEdit2Line fontSize={"1.3rem"} /></ItemBtn>
-           </BtnContainer>
-           </Items>})}
+            return <Items key={item.id}>
+            <p>{item.texto}</p>
+            <BtnContainer>
+            <ItemBtn onClick={() => deleteToDo(item.id)}><RiDeleteBin5Line fontSize={"1.3rem"} /></ItemBtn>
+            <ItemBtn onClick={() => editToDo(item)} bgcolor><RiEdit2Line fontSize={"1.3rem"} /></ItemBtn>
+            </BtnContainer>
+            </Items>})}
             
         </ItemContainer>
     </ListContainer>

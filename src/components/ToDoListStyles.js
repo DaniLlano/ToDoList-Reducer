@@ -65,7 +65,11 @@ color: ${p => p.bgcolor ? "green" : "red"};
 
 export const Items = styled.li`
 display: flex;
-justify-content: space-around;
+justify-content: space-between;
+border: 1px solid black;
+border-radius: 0.3rem;
+margin: 0.5rem 1rem;
+padding: 0.2rem 2rem;
 `
 
 export const BtnContainer = styled.div`
